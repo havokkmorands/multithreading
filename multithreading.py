@@ -21,17 +21,19 @@ def extract_movie_details(movie_link):
     if movie_soup is not None:
         title = None
         date = None
-
-        movie_data = movie_soup.find('div', attrs={'class': 'sc-385ac629-3 kRUqXl'})
+        # ajustar o trecho abaixo de acordo com o site de um filme, exemplo : https://www.imdb.com/title/tt15398776/?ref_=chtmvm_t_1, usar inspecionar elemento para definir os elementos.
+        movie_data = movie_soup.find('div', attrs={'class': 'sc-e226b0e3-3 jJsEuz'})
         if movie_data is not None:
+            # h1 deve ser o título do nome do filme
             title = movie_data.find('h1').get_text()
+            # date deve ser apenas a classe que representa o ano.
             date = movie_data.find('a', attrs={'class': 'ipc-link ipc-link--baseAlt ipc-link--inherit-color'}).get_text().strip()
-
+        # rating é a nota do filme, por exemplo, 8.6.
         rating = movie_soup.find('span', attrs={'class': 'sc-bde20123-1 iZlgcd'}).get_text() if movie_soup.find(
             'span', attrs={'class': 'sc-bde20123-1 iZlgcd'}) else None
-
-        plot_text = movie_soup.find('span', attrs={'class': 'sc-6a7933c5-1 fPmRoa'}).get_text().strip() if movie_soup.find(
-            'span', attrs={'class': 'sc-6a7933c5-1 fPmRoa'}) else None
+        # plot é o texto de sinopse do filme
+        plot_text = movie_soup.find('span', attrs={'class': 'sc-466bb6c-0 kJJttH'}).get_text().strip() if movie_soup.find(
+            'span', attrs={'class': 'sc-466bb6c-0 kJJttH'}) else None
 
         with open('movies.csv', mode='a') as file:
             movie_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -41,6 +43,7 @@ def extract_movie_details(movie_link):
 
 
 def extract_movies(soup):
+    # aqui são configurações de hierarquia da página, do ponto de encontro do filme até sua divisão e organização em elementos.
     movies_table = soup.find('div', attrs={'data-testid': 'chart-layout-main-column'}).find('ul')
     movies_table_rows = movies_table.find_all('li')
     movie_links = ['https://imdb.com' + movie.find('a')['href'] for movie in movies_table_rows]
