@@ -13,7 +13,7 @@ MAX_THREADS = 10
 def extract_movie_details(movie_link):
     time.sleep(random.uniform(0, 0.2))
     response = requests.get(movie_link, headers=headers)
-    movie_soup = BeautifulSoup(response.content, 'html.parser')
+    movie_soup = bs4(response.content, 'html.parser')
 
     if movie_soup is not None:
         title = None
