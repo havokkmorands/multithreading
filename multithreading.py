@@ -10,7 +10,7 @@ headers = {
     "Accept-Language": "en-US,en;q=0.9"
 }
 
-MAX_THREADS = 10
+MAX_THREADS = 20
 
 def extract_movie_details(movie_link):
     time.sleep(random.uniform(0, 0.2))
